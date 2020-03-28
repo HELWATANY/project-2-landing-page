@@ -88,11 +88,36 @@ function handleSectionActivation (sections, activeSection, activeClass) {
 function scrollToElement(selector) {
   if (document.querySelector(selector)) {
     document.querySelector(selector).scrollIntoView({
+      block: 'start',
       behavior: 'smooth'
     });
   }
 }
 
+/**
+ * @description Handle hide and show if back to top button
+ * @param {HTMLElement} button
+ */
+function handleDisplayBackToTopButton(button) {
+  const width = window.innerWidth || document.documentElement.clientWidth;
+  const triggerPoint = window.innerHeight || document.documentElement.clientHeight;
+  const distance =document.body.scrollTop || document.documentElement.scrollTop;
+  button.style.display = (distance >= triggerPoint ? 'block' : 'none');
+}
+
+/**
+ * @description Handle smooth scroll to top
+ */
+function scrollToTop() {
+  let position = document.body.scrollTop || document.documentElement.scrollTop;
+  let scrollAnimation;
+  if (position) {
+    window.scrollBy(0, -Math.max(1, Math.floor(position / 10)));
+    scrollAnimation = setTimeout("scrollToTop()", 30);
+  } else {
+    clearTimeout(scrollAnimation);
+  }
+}
 
 /**
  * End Helper Functions
@@ -132,8 +157,11 @@ function handlePageScroll () {
   // Clear Timeout
   window.clearTimeout(isScrolling);
 
+  let backToTopButton = document.getElementById('backToTop');
+
   // Set section as active after scroll ends
   isScrolling = setTimeout(() => {
+    handleDisplayBackToTopButton(backToTopButton);
     const sections = getNavigationSections(navAttr);
     let activeSection = null;
 
@@ -175,9 +203,16 @@ function handleNavItemClick (evt) {
 // Make sure that the DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
   const sections = getNavigationSections(navAttr);
+  const backToTopButton = document.getElementById('backToTop');
 
   // Build menu
   buildNavElements(sections, navAttr);
+
+  // Back To Top
+  handleDisplayBackToTopButton(backToTopButton);
+  backToTopButton.addEventListener('click', () => {
+    scrollToTop();
+  });
 
   // Scroll to section on link click
   document.querySelector('#navbar__list').addEventListener('click', handleNavItemClick);
