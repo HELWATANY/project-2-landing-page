@@ -66,18 +66,18 @@ function isInViewPort (element) {
 }
 
 /**
- * @description Handle setting a section to active and deactivate other sections.
- * @param {NodeList} sections
- * @param {HTMLElement} activeSection
+ * @description Handle setting an element to active and deactivate other siblings.
+ * @param {NodeList} siblings
+ * @param {HTMLElement} activeElement
  * @param {string} activeClass
  */
-function handleSectionActivation (sections, activeSection, activeClass) {
-  sections.forEach(section => {
+function handleElementActivation (siblings, activeElement, activeClass) {
+  siblings.forEach(section => {
     if (section.classList.contains(activeClass)) {
       section.classList.remove(activeClass);
     }
 
-    activeSection.classList.add(activeClass);
+    activeElement.classList.add(activeClass);
   });
 }
 
@@ -99,7 +99,6 @@ function scrollToElement(selector) {
  * @param {HTMLElement} button
  */
 function handleDisplayBackToTopButton(button) {
-  const width = window.innerWidth || document.documentElement.clientWidth;
   const triggerPoint = window.innerHeight || document.documentElement.clientHeight;
   const distance =document.body.scrollTop || document.documentElement.scrollTop;
   button.style.display = (distance >= triggerPoint ? 'block' : 'none');
@@ -137,11 +136,14 @@ function buildNavElements (sections, navAttr) {
 
     sections.forEach(section => {
       const menuItem = document.createElement('li');
+      menuItem.setAttribute('data-section', section.getAttribute('id'));
+
       const menuItemContent = document.createElement('a');
       menuItemContent.className = 'menu__link';
       menuItemContent.setAttribute('href', `#${section.getAttribute('id')}`);
-      menuItemContent.setAttribute('data-section', `#${section.getAttribute('id')}`);
+      menuItemContent.setAttribute('data-section', section.getAttribute('id'));
       menuItemContent.innerText = section.getAttribute(navAttr);
+
       menuItem.appendChild(menuItemContent);
       fragment.appendChild(menuItem);
     });
@@ -173,7 +175,21 @@ function handlePageScroll () {
       });
 
       if (activeSection) {
-        handleSectionActivation(sections, activeSection, activeClass);
+        handleElementActivation(sections, activeSection, activeClass);
+
+        // Set Menu Item Active
+        const menuItems = document.querySelector('#navbar__list').querySelectorAll('li');
+        let activeMenuItem = null;
+
+        menuItems.forEach(item => {
+          if (item.getAttribute('data-section') === activeSection.getAttribute('id')) {
+            activeMenuItem = item;
+          }
+        });
+
+        if (activeMenuItem) {
+          handleElementActivation(menuItems, activeMenuItem, activeClass);
+        }
       }
     }
 
@@ -188,8 +204,8 @@ function handleNavItemClick (evt) {
   if (evt.target.nodeName === 'A') {
     evt.preventDefault();
     const sectionId = evt.target.getAttribute('data-section');
-    history.pushState(null,null, sectionId);
-    scrollToElement(sectionId);
+    history.pushState(null,null, `#${sectionId}`);
+    scrollToElement(`#${sectionId}`);
   }
 }
 
