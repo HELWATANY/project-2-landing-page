@@ -35,5 +35,5 @@ Handle scrolling to an element with a given selector.
 **Parameters:**
 * _selector_: `string`.
 
-#### _scrollToTop () :_
+### _scrollToTop () :_
 Handle smooth scroll to top by getting the distance to document top and scroll the window towards the top every `30 ms` by calling itself recursively
