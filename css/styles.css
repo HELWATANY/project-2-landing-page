@@ -221,3 +221,11 @@ section.active .landing__container::after {
 		           rotate(-360deg);
 	}
 }
+
+/* ---- Responsive ---- */
+@media(max-width: 1099px) {
+    .navbar__menu ul {
+        text-align: center;
+    }
+
+}
