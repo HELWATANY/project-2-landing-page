@@ -2,12 +2,38 @@
 
 ## Table of Contents
 
-* [Instructions](#instructions)
+* [Helper Functions](#helper-functions)
 
-## Instructions
+## Helper Functions
 
-The starter project has some HTML and CSS styling to display a static version of the Landing Page project. You'll need to convert this project from a static project to an interactive one. This will require modifying the HTML and CSS files, but primarily the JavaScript file.
+#### getNavigationSections(navAttr) :
+Returns a NodeList of sections that have the passed attribute
 
-To get started, open `js/app.js` and start building out the app's functionality
+**Parameters:**
+* _navAttr_: `string` The attribute used to identify which section should be considered in the navigation menu.
 
-For specific, detailed instructions, look at the project instructions in the Udacity Classroom.
+
+#### isInViewPort(element):
+Check if the passed element is in the viewport relative to the window height and width.
+
+**Parameters:**
+* _element_: `HTMLElement` to check its' position in the viewport.
+
+
+#### handleElementActivation (siblings, activeElement, activeClass):
+Handle setting an element to active and deactivate other siblings.
+
+**Parameters:**
+* _siblings_: `NodeList`.
+* _activeElement_: `HTMLElement`.
+* _activeClass_: `string`.
+
+
+#### scrollToElement (selector):
+Handle scrolling to an element with a given selector.
+
+**Parameters:**
+* _selector_: `string`.
+
+#### scrollToTop ():
+Handle smooth scroll to top by getting the distance to document top and scroll the window towards the top every `30 ms` by calling itself recursively
