@@ -249,5 +249,11 @@ section.active .landing__container::after {
   .navbar__menu ul {
     text-align: center;
   }
+}
 
+@media(max-width: 450px) {
+  .navbar__menu .menu__link {
+    font-size: 0.8em;
+    padding: 0.9em 0.7em;
+  }
 }

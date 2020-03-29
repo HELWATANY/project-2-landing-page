@@ -66,6 +66,21 @@ function isInViewPort (element) {
 }
 
 /**
+ * @description Check if any part of the passed element is in the viewport
+ * @param {HTMLElement} element
+ * @returns {boolean}
+ */
+function isVisible (element) {
+  const { top, bottom } = element.getBoundingClientRect();
+  const vHeight = (window.innerHeight || document.documentElement.clientHeight);
+
+  return (
+    (top > 0 || bottom > 0) &&
+    top < vHeight
+  );
+}
+
+/**
  * @description Handle setting an element to active and deactivate other siblings.
  * @param {NodeList} siblings
  * @param {HTMLElement} activeElement
@@ -166,10 +181,12 @@ function handlePageScroll () {
     handleDisplayBackToTopButton(backToTopButton);
     const sections = getNavigationSections(navAttr);
     let activeSection = null;
+    const clientWidth = window.innerWidth || document.documentElement.clientWidth;
+    let visibilityCheck = (clientWidth <= 420 ? isVisible : isInViewPort)
 
     if (sections.length > 0) {
       sections.forEach(section => {
-        if (isInViewPort(section)) {
+        if (visibilityCheck(section)) {
           activeSection = section;
         }
       });
